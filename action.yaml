@@ -37,11 +37,13 @@ runs:
 
     - name: Run 'pytest'
       run: |
-        args=()
+        args=(uv run)
         if [ -n "${{inputs.with-requirements}}" ]; then
           args+=(--with-requirements "${{inputs.with-requirements}}")
         fi
         args+=(--resolution "${{inputs.resolution}}")
         args+=(--prerelease "${{inputs.prerelease}}")
-        uv run "${args[@]}" pytest --numprocesses auto
+        args+=(pytest --numprocesses auto)
+        echo "[$(date +'%Y-%m-%d %H:%M:%S')] Running '${args[@]}'..."
+        "${args[@]}"
       shell: bash
