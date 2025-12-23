@@ -40,6 +40,7 @@ runs:
         args=()
         if [ -n "${{ inputs.with-requirements }}" ]; then
           args+=(--with-requirements "${{ inputs.with-requirements }}")
+        fi
         args+=(--resolution "${{ inputs.resolution}} ")
         args+=(--prerelease "${{ inputs.prerelease}} ")
         uv run "${args[@]}" pytest --numprocesses auto
