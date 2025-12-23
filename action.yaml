@@ -42,7 +42,7 @@ runs:
         UV_PRERELEASE: ${{ inputs.prerelease }}
       run: |
         set -euo pipefail
-        args=(uv run)
+        args=(uv run --all-extras)
         if [ -n "${{inputs.with-requirements}}" ]; then
           args+=(--with-requirements "${{inputs.with-requirements}}")
         fi
