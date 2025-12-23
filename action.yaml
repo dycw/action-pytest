@@ -47,6 +47,8 @@ runs:
           args+=(--with-requirements "${{inputs.with-requirements}}")
         fi
         args+=(pytest --numprocesses auto)
-        echo "[$(date +'%Y-%m-%d %H:%M:%S')] Running '${args[@]}'..."
+        echo "[$(date +'%Y-%m-%d %H:%M:%S')] Running:"
+        printf '  %q' "${args[@]}"
+        echo
         "${args[@]}"
       shell: bash
