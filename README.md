@@ -1,3 +1,3 @@
-# `template-action`
+# `action-pytest`
 
-Template for Python actions
+Run pytest
