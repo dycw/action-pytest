@@ -1,3 +1,3 @@
 # `action-pytest`
 
-Run pytest
+Run 'ruff'
