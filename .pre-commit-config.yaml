@@ -12,7 +12,7 @@ repos:
     rev: v0.9.3
   - hooks:
       - args:
-          - --description=Template for Python actions
+          - --description=Run pytest
           - --github--push--tag
           - --github--push--tag--latest
           - --github--push--tag--major
@@ -20,7 +20,7 @@ repos:
           - --pre-commit--prettier
           - --pre-commit--taplo
           - --readme
-          - --repo-name=template-action
+          - --repo-name=action-pytest
         id: nitpick
     repo: https://github.com/dycw/pre-commit-hook-nitpick
     rev: 0.5.3
