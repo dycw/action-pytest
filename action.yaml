@@ -41,6 +41,7 @@ runs:
         UV_RESOLUTION: ${{ inputs.resolution }}
         UV_PRERELEASE: ${{ inputs.prerelease }}
       run: |
+        set -euo pipefail
         args=(uv run)
         if [ -n "${{inputs.with-requirements}}" ]; then
           args+=(--with-requirements "${{inputs.with-requirements}}")
