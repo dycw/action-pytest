@@ -48,7 +48,7 @@ runs:
         fi
         args+=(pytest --numprocesses auto)
         echo "[$(date +'%Y-%m-%d %H:%M:%S')] Running:"
-        printf '%q' "${args[@]}"
+        printf '%q ' "${args[@]}"
         echo
         "${args[@]}"
       shell: bash
