@@ -1,5 +1,5 @@
-name: abc
-description: description
+name: pytest
+description: Run pytest
 
 branding:
   icon: activity
@@ -9,9 +9,15 @@ inputs:
   token:
     description: GitHub Personal Access Token
     default: ${{ github.token }}
-  flag:
-    description: Example flag
-    default: false
+  python-version:
+    description: The version of Python to set UV_PYTHON to
+    default:
+  resolution:
+    description: The strategy to use when selecting between the different compatible versions for a given package requirement
+    default: highest
+  prerelease:
+    description: The strategy to use when considering pre-release versions
+    default: disallow
 
 runs:
   using: composite
@@ -24,15 +30,11 @@ runs:
     - name: Install 'uv'
       uses: astral-sh/setup-uv@v7
       with:
-        python-version: 3.13
+        python-version: ${{ inputs.python-version }}
 
-    - name: Install 'dycw-actions'
-      run: uv tool install --reinstall dycw-actions
-      shell: bash
-
-    - name: Run 'action abc'
+    - name: Run 'pytest'
       env:
-        TOKEN: ${{ inputs.token }}
-        FLAG: ${{ inputs.flag }}
-      run: uv tool run --from dycw-actions --isolated action abc
+        UV_RESOLUTION: ${{ inputs.resolution }}
+        UV_PRERELEASE: ${{ inputs.prerelease }}
+      run: uv run --with pytest --with pytest-xdist pytest
       shell: bash
