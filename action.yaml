@@ -36,13 +36,15 @@ runs:
         python-version: ${{inputs.python-version}}
 
     - name: Run 'pytest'
+      env:
+        UV_PYTHON: ${{inputs.python-version}}
+        UV_RESOLUTION: ${{ inputs.resolution }}
+        UV_PRERELEASE: ${{ inputs.prerelease }}
       run: |
         args=(uv run)
         if [ -n "${{inputs.with-requirements}}" ]; then
           args+=(--with-requirements "${{inputs.with-requirements}}")
         fi
-        args+=(--resolution "${{inputs.resolution}}")
-        args+=(--prerelease "${{inputs.prerelease}}")
         args+=(pytest --numprocesses auto)
         echo "[$(date +'%Y-%m-%d %H:%M:%S')] Running '${args[@]}'..."
         "${args[@]}"
