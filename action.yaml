@@ -12,6 +12,9 @@ inputs:
   python-version:
     description: The version of Python to set UV_PYTHON to
     default:
+  with-requirements:
+    description: Run with the packages listed in the given files
+    default:
   resolution:
     description: The strategy to use when selecting between the different compatible versions for a given package requirement
     default: highest
@@ -33,8 +36,11 @@ runs:
         python-version: ${{ inputs.python-version }}
 
     - name: Run 'pytest'
-      env:
-        UV_RESOLUTION: ${{ inputs.resolution }}
-        UV_PRERELEASE: ${{ inputs.prerelease }}
-      run: uv run --with pytest --with pytest-xdist pytest
+      run: |
+        args=()
+        if [ -n "${{ inputs.with-requirements }}" ]; then
+          args+=(--with-requirements "${{ inputs.with-requirements }}")
+        args+=(--resolution "${{ inputs.resolution}} ")
+        args+=(--prerelease "${{ inputs.prerelease}} ")
+        uv run "${args[@]}" pytest --numprocesses auto
       shell: bash
