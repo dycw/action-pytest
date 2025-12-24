@@ -36,8 +36,8 @@ runs:
     - name: Run 'pytest'
       env:
         UV_PYTHON: ${{inputs.python-version}}
-        UV_RESOLUTION: ${{ inputs.resolution }}
-        UV_PRERELEASE: ${{ inputs.prerelease }}
+        UV_RESOLUTION: ${{inputs.resolution}}
+        UV_PRERELEASE: ${{inputs.prerelease}}
       run: |
         set -euo pipefail
         args=(uv run --all-extras)
