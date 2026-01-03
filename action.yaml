@@ -6,8 +6,11 @@ branding:
   color: gray-dark
 
 inputs:
-  token:
-    description: GitHub Personal Access Token
+  token-checkout:
+    description: Personal access token (PAT) used to fetch the repository
+    default: ${{github.token}}
+  token-uv:
+    description: Personal access token (PAT) used to download uv
     default: ${{github.token}}
   python-version:
     description: The version of Python to set UV_PYTHON to
@@ -40,11 +43,11 @@ runs:
         UV_PRERELEASE: ${{inputs.prerelease}}
       run: |
         set -euo pipefail
-        args=(uv run --all-extras)
+        args=(uv run --all-extras --all-groups --exact)
         if [ -n "${{inputs.with-requirements}}" ]; then
           args+=(--with-requirements "${{inputs.with-requirements}}")
         fi
-        args+=(pytest --numprocesses auto)
+        args+=(--isolated --reinstall pytest --numprocesses auto)
         echo "[$(date +'%Y-%m-%d %H:%M:%S')] Running:"
         printf '%q ' "${args[@]}"
         echo
