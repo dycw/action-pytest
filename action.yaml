@@ -15,15 +15,18 @@ inputs:
   python-version:
     description: The version of Python to set UV_PYTHON to
     default:
-  with-requirements:
-    description: Run with the packages listed in the given files
-    default:
   resolution:
     description: The strategy to use when selecting between the different compatible versions for a given package requirement
     default: highest
   prerelease:
     description: The strategy to use when considering pre-release versions
     default: disallow
+  native-tls:
+    description: Whether to load TLS certificates from the platform's native certificate store
+    default: false
+  with-requirements:
+    description: Run with the packages listed in the given files
+    default:
 
 runs:
   using: composite
@@ -41,9 +44,10 @@ runs:
 
     - name: Run 'pytest'
       env:
-        UV_PYTHON: ${{inputs.python-version}}
         UV_RESOLUTION: ${{inputs.resolution}}
         UV_PRERELEASE: ${{inputs.prerelease}}
+        UV_PYTHON: ${{inputs.python-version}}
+        UV_NATIVE_TLS: ${{inputs.native-tls}}
       run: |
         set -euo pipefail
         args=(uv run --all-extras --all-groups --exact)
