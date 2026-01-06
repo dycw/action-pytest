@@ -52,21 +52,21 @@ runs:
         python-version: ${{inputs.python-version}}
 
     - name: Install 'dycw-github-downloader'
-      if: ${{inputs.sops-age-key}} != ''
+      if: ${{inputs.sops-age-key != ''}}
       run: uv tool install --reinstall dycw-github-downloader
       shell: bash
 
     - name: Install 'sops'
       env:
         TOKEN: ${{inputs.token-sops}}
-      if: ${{inputs.sops-age-key}} != ''
+      if: ${{inputs.sops-age-key != ''}}
       run: uv tool run --from dycw-github-downloader --isolated github-download sops
       shell: bash
 
     - name: Install 'age'
       env:
         TOKEN: ${{inputs.token-age}}
-      if: ${{inputs.sops-age-key}} != ''
+      if: ${{inputs.sops-age-key != ''}}
       run: uv tool run --from dycw-github-downloader --isolated github-download age
       shell: bash
 
