@@ -15,6 +15,15 @@ inputs:
   python-version:
     description: The version of Python to set UV_PYTHON to
     default:
+  sops-age-key:
+    description: The 'age' key for 'sops'
+    default:
+  token-sops:
+    description: Personal access token (PAT) used to download sops
+    default: ${{github.token}}
+  token-age:
+    description: Personal access token (PAT) used to download age
+    default: ${{github.token}}
   resolution:
     description: The strategy to use when selecting between the different compatible versions for a given package requirement
     default: highest
@@ -42,12 +51,32 @@ runs:
         github-token: ${{inputs.token-uv}}
         python-version: ${{inputs.python-version}}
 
-    - name: Run 'pytest'
+    - name: Install 'dycw-github-downloader'
+      if: ${{inputs.sops-age-key}} != ''
+      run: uv tool install --reinstall dycw-github-downloader
+      shell: bash
+
+    - name: Install 'sops'
       env:
+        TOKEN: ${{inputs.token-sops}}
+      if: ${{inputs.sops-age-key}} != ''
+      run: uv tool run --from dycw-github-downloader --isolated github-download sops
+      shell: bash
+
+    - name: Install 'age'
+      env:
+        TOKEN: ${{inputs.token-age}}
+      if: ${{inputs.sops-age-key}} != ''
+      run: uv tool run --from dycw-github-downloader --isolated github-download age
+      shell: bash
+
+    - env:
+        SOPS_AGE_KEY: ${{inputs.sops-age-key}}
         UV_RESOLUTION: ${{inputs.resolution}}
         UV_PRERELEASE: ${{inputs.prerelease}}
         UV_PYTHON: ${{inputs.python-version}}
         UV_NATIVE_TLS: ${{inputs.native-tls}}
+      name: Run 'pytest'
       run: |
         set -euo pipefail
         args=(uv run --all-extras --all-groups --exact)
