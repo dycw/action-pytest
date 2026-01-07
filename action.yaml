@@ -6,11 +6,8 @@ branding:
   color: gray-dark
 
 inputs:
-  token-checkout:
-    description: Personal access token (PAT) used to fetch the repository
-    default: ${{github.token}}
-  token-uv:
-    description: Personal access token (PAT) used to download uv
+  token:
+    description: Personal access token (PAT)
     default: ${{github.token}}
   python-version:
     description: The version of Python to set UV_PYTHON to
@@ -18,12 +15,6 @@ inputs:
   sops-age-key:
     description: The 'age' key for 'sops'
     default:
-  token-sops:
-    description: Personal access token (PAT) used to download sops
-    default: ${{github.token}}
-  token-age:
-    description: Personal access token (PAT) used to download age
-    default: ${{github.token}}
   resolution:
     description: The strategy to use when selecting between the different compatible versions for a given package requirement
     default: highest
@@ -43,12 +34,12 @@ runs:
     - name: Check out repo
       uses: actions/checkout@v6
       with:
-        token: ${{inputs.token-checkout}}
+        token: ${{inputs.token}}
 
     - name: Install 'uv'
       uses: astral-sh/setup-uv@v7
       with:
-        github-token: ${{inputs.token-uv}}
+        github-token: ${{inputs.token}}
         python-version: ${{inputs.python-version}}
 
     - name: Install 'dycw-github-downloader'
@@ -58,14 +49,14 @@ runs:
 
     - name: Install 'sops'
       env:
-        TOKEN: ${{inputs.token-sops}}
+        TOKEN: ${{inputs.token}}
       if: ${{inputs.sops-age-key != ''}}
       run: uv tool run --from dycw-github-downloader --isolated github-download sops
       shell: bash
 
     - name: Install 'age'
       env:
-        TOKEN: ${{inputs.token-age}}
+        TOKEN: ${{inputs.token}}
       if: ${{inputs.sops-age-key != ''}}
       run: uv tool run --from dycw-github-downloader --isolated github-download age
       shell: bash
