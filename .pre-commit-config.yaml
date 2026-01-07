@@ -1,9 +1,10 @@
 repos:
-  - repo: https://github.com/dycw/conformalize
-    rev: 0.13.7
+  - repo: https://github.com/dycw/actions
+    rev: 0.6.3
     hooks:
-      - args:
-          - --description=Run 'ruff'
+      - id: conformalize-repo
+        args:
+          - --description=Run 'pytest'
           - --github--pull-request--pre-commit
           - --github--push--tag
           - --github--push--tag--latest
@@ -13,7 +14,6 @@ repos:
           - --pre-commit--taplo
           - --readme
           - --repo-name=action-pytest
-        id: conformalize
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
