@@ -6,8 +6,11 @@ branding:
   color: gray-dark
 
 inputs:
-  token:
-    description: Personal access token (PAT)
+  token-checkout:
+    description: Personal access token (PAT) used to fetch the repository
+    default: ${{github.token}}
+  token-github:
+    description: Personal access token (PAT) used to authenticate with GitHub
     default: ${{github.token}}
   python-version:
     description: The version of Python to set UV_PYTHON to
@@ -34,12 +37,12 @@ runs:
     - name: Check out repo
       uses: actions/checkout@v6
       with:
-        token: ${{inputs.token}}
+        token: ${{inputs.token-checkout}}
 
     - name: Install 'uv'
       uses: astral-sh/setup-uv@v7
       with:
-        github-token: ${{inputs.token}}
+        github-token: ${{inputs.token-github}}
         python-version: ${{inputs.python-version}}
 
     - name: Install 'dycw-github-downloader'
