@@ -61,7 +61,7 @@ runs:
       env:
         TOKEN: ${{inputs.token-github}}
       if: ${{inputs.sops-age-key != ''}}
-      run: uv tool run --from dycw-github-downloader --isolated github-download age
+      run: uv tool run --from dycw-installer --isolated installer age
       shell: bash
 
     - env:
