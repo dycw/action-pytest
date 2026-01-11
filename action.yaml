@@ -45,16 +45,16 @@ runs:
         github-token: ${{inputs.token-github}}
         python-version: ${{inputs.python-version}}
 
-    - name: Install 'dycw-github-downloader'
+    - name: Install 'dycw-installer'
       if: ${{inputs.sops-age-key != ''}}
-      run: uv tool install --reinstall dycw-github-downloader
+      run: uv tool install --reinstall dycw-installer
       shell: bash
 
     - name: Install 'sops'
       env:
         TOKEN: ${{inputs.token-github}}
       if: ${{inputs.sops-age-key != ''}}
-      run: uv tool run --from dycw-github-downloader --isolated github-download sops
+      run: uv tool run --from dycw-installer --isolated installer sops
       shell: bash
 
     - name: Install 'age'
