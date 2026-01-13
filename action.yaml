@@ -65,6 +65,7 @@ runs:
       shell: bash
 
     - env:
+        GITHUB_TOKEN: ${{inputs.token-github}}
         SOPS_AGE_KEY: ${{inputs.sops-age-key}}
         UV_RESOLUTION: ${{inputs.resolution}}
         UV_PRERELEASE: ${{inputs.prerelease}}
