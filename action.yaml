@@ -20,7 +20,7 @@ inputs:
     default:
   resolution:
     description: The strategy to use when selecting between the different compatible versions for a given package requirement
-    default: highest
+    default: lowest-direct
   prerelease:
     description: The strategy to use when considering pre-release versions
     default: disallow
@@ -45,23 +45,18 @@ runs:
         github-token: ${{inputs.token-github}}
         python-version: ${{inputs.python-version}}
 
-    - name: Install 'dycw-installer'
-      if: ${{inputs.sops-age-key != ''}}
-      run: uv tool install --reinstall dycw-installer
-      shell: bash
-
     - name: Install 'sops'
       env:
         TOKEN: ${{inputs.token-github}}
       if: ${{inputs.sops-age-key != ''}}
-      run: uv tool run --from dycw-installer --isolated installer sops
+      run: uv tool run --from dycw-installer@latest --isolated --resolution highest --prerelease disallow installer sops
       shell: bash
 
     - name: Install 'age'
       env:
         TOKEN: ${{inputs.token-github}}
       if: ${{inputs.sops-age-key != ''}}
-      run: uv tool run --from dycw-installer --isolated installer age
+      run: uv tool run --from dycw-installer@latest --isolated --resolution highest --prerelease disallow installer age
       shell: bash
 
     - env:
