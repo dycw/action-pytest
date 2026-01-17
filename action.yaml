@@ -49,14 +49,14 @@ runs:
       env:
         TOKEN: ${{inputs.token-github}}
       if: ${{inputs.sops-age-key != ''}}
-      run: uv tool run --from dycw-installer@latest --isolated --resolution highest --prerelease disallow installer sops
+      run: uv tool run --from dycw-installer[cli]@latest --isolated --resolution highest --prerelease disallow cli sops
       shell: bash
 
     - name: Install 'age'
       env:
         TOKEN: ${{inputs.token-github}}
       if: ${{inputs.sops-age-key != ''}}
-      run: uv tool run --from dycw-installer@latest --isolated --resolution highest --prerelease disallow installer age
+      run: uv tool run --from dycw-installer[cli]@latest --isolated --resolution highest --prerelease disallow cli age
       shell: bash
 
     - env:
