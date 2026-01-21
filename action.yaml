@@ -20,7 +20,7 @@ inputs:
     default:
   resolution:
     description: The strategy to use when selecting between the different compatible versions for a given package requirement
-    default: lowest-direct
+    default: highest
   prerelease:
     description: The strategy to use when considering pre-release versions
     default: disallow
@@ -49,14 +49,14 @@ runs:
       env:
         TOKEN: ${{inputs.token-github}}
       if: ${{inputs.sops-age-key != ''}}
-      run: uv tool run --from dycw-installer[cli]@latest --isolated --resolution highest --prerelease disallow cli sops
+      run: uv tool run --from dycw-installer[cli]@latest --isolated --resolution highest --prerelease disallow --managed-python cli sops
       shell: bash
 
     - name: Install 'age'
       env:
         TOKEN: ${{inputs.token-github}}
       if: ${{inputs.sops-age-key != ''}}
-      run: uv tool run --from dycw-installer[cli]@latest --isolated --resolution highest --prerelease disallow cli age
+      run: uv tool run --from dycw-installer[cli]@latest --isolated --resolution highest --prerelease disallow --managed-python cli age
       shell: bash
 
     - env:
@@ -69,7 +69,7 @@ runs:
       name: Run 'pytest'
       run: |
         set -euo pipefail
-        args=(uv run --all-extras --all-groups --exact)
+        args=(uv run --only-dev --exact)
         if [ -n "${{inputs.with-requirements}}" ]; then
           args+=(--with-requirements "${{inputs.with-requirements}}")
         fi

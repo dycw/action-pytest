@@ -1,3 +1,0 @@
-# `action-pytest`
-
-Run 'pytest'
