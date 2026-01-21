@@ -18,6 +18,9 @@ inputs:
   sops-age-key:
     description: The 'age' key for 'sops'
     default:
+  index:
+    description: The URLs to use when resolving dependencies, in addition to the default index
+    default:
   resolution:
     description: The strategy to use when selecting between the different compatible versions for a given package requirement
     default: highest
@@ -27,9 +30,6 @@ inputs:
   native-tls:
     description: Whether to load TLS certificates from the platform's native certificate store
     default: false
-  with-requirements:
-    description: Run with the packages listed in the given files
-    default:
 
 runs:
   using: composite
@@ -59,23 +59,14 @@ runs:
       run: uv tool run --from dycw-installer[cli]@latest --isolated --resolution highest --prerelease disallow --managed-python cli age
       shell: bash
 
-    - env:
+    - name: Run 'pytest'
+      env:
         GITHUB_TOKEN: ${{inputs.token-github}}
         SOPS_AGE_KEY: ${{inputs.sops-age-key}}
+        UV_INDEX: ${{inputs.index}}
         UV_RESOLUTION: ${{inputs.resolution}}
         UV_PRERELEASE: ${{inputs.prerelease}}
         UV_PYTHON: ${{inputs.python-version}}
         UV_NATIVE_TLS: ${{inputs.native-tls}}
-      name: Run 'pytest'
-      run: |
-        set -euo pipefail
-        args=(uv run --only-dev --exact)
-        if [ -n "${{inputs.with-requirements}}" ]; then
-          args+=(--with-requirements "${{inputs.with-requirements}}")
-        fi
-        args+=(--isolated --reinstall --managed-python pytest --numprocesses auto)
-        echo "[$(date +'%Y-%m-%d %H:%M:%S')] Running:"
-        printf '%q ' "${args[@]}"
-        echo
-        "${args[@]}"
+      run: uv run --exact --with=pytest --with=pytest-xdist --isolated --reinstall --managed-python pytest --numprocesses auto
       shell: bash
