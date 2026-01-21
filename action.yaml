@@ -73,7 +73,7 @@ runs:
         if [ -n "${{inputs.with-requirements}}" ]; then
           args+=(--with-requirements "${{inputs.with-requirements}}")
         fi
-        args+=(--isolated --reinstall pytest --numprocesses auto)
+        args+=(--isolated --reinstall --managed-python pytest --numprocesses auto)
         echo "[$(date +'%Y-%m-%d %H:%M:%S')] Running:"
         printf '%q ' "${args[@]}"
         echo
