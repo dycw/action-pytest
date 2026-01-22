@@ -68,5 +68,5 @@ runs:
         UV_PRERELEASE: ${{inputs.prerelease}}
         UV_PYTHON: ${{inputs.python-version}}
         UV_NATIVE_TLS: ${{inputs.native-tls}}
-      run: uv run --all-extras --all-groups --exact --with=pytest --with=pytest-xdist --isolated --reinstall --managed-python pytest --numprocesses auto
+      run: uv run --all-extras --all-groups --exact --with=pytest --with=pytest-xdist --isolated --reinstall --managed-python pytest --cov-report=term-missing --numprocesses auto
       shell: bash
