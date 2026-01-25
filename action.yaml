@@ -46,17 +46,33 @@ runs:
         python-version: ${{inputs.python-version}}
 
     - name: Install 'sops'
-      env:
-        TOKEN: ${{inputs.token-github}}
       if: ${{inputs.sops-age-key != ''}}
-      run: uv tool run --from dycw-installer[cli]@latest --isolated --resolution highest --prerelease disallow --managed-python cli sops
+      run: |
+        set -euo pipefail
+        args=(uv tool run --from dycw-installer[cli]@latest --isolated --resolution highest --prerelease disallow --managed-python cli sops)
+        token="${{inputs.token}}"
+        if [[ "${token,,}" =~ ^(true|1|yes|on|t|y)$ ]]; then
+          args+=(--token "${token}")
+        fi
+        echo "[$(date +'%Y-%m-%d %H:%M:%S')] Running:"
+        printf '%q ' "${args[@]}"
+        echo
+        "${args[@]}"
       shell: bash
 
     - name: Install 'age'
-      env:
-        TOKEN: ${{inputs.token-github}}
       if: ${{inputs.sops-age-key != ''}}
-      run: uv tool run --from dycw-installer[cli]@latest --isolated --resolution highest --prerelease disallow --managed-python cli age
+      run: |
+        set -euo pipefail
+        args=(uv tool run --from dycw-installer[cli]@latest --isolated --resolution highest --prerelease disallow --managed-python cli age)
+        token="${{inputs.token}}"
+        if [[ "${token,,}" =~ ^(true|1|yes|on|t|y)$ ]]; then
+          args+=(--token "${token}")
+        fi
+        echo "[$(date +'%Y-%m-%d %H:%M:%S')] Running:"
+        printf '%q ' "${args[@]}"
+        echo
+        "${args[@]}"
       shell: bash
 
     - name: Run 'pytest'
