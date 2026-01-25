@@ -75,6 +75,7 @@ runs:
 
     - name: Run 'pytest'
       env:
+        GITHUB_TOKEN: ${{inputs.token-github}}
         SOPS_AGE_KEY: ${{inputs.sops-age-key}}
         UV_INDEX: ${{inputs.index}}
         UV_RESOLUTION: ${{inputs.resolution}}
