@@ -50,9 +50,9 @@ runs:
       run: |
         set -euo pipefail
         args=(uv tool run --from dycw-installer[cli]@latest --isolated --resolution highest --prerelease disallow --managed-python cli sops)
-        token="${{inputs.token}}"
-        if [[ -n "${token}" ]]; then
-          args+=(--token "${token}")
+        token_github="${{inputs.token-github}}"
+        if [[ -n "${token_github}" ]]; then
+          args+=(--token "${token_github}")
         fi
         echo "[$(date +'%Y-%m-%d %H:%M:%S')] Running:"
         printf '%q ' "${args[@]}"
@@ -65,9 +65,9 @@ runs:
       run: |
         set -euo pipefail
         args=(uv tool run --from dycw-installer[cli]@latest --isolated --resolution highest --prerelease disallow --managed-python cli age)
-        token="${{inputs.token}}"
-        if [[ -n "${token}" ]]; then
-          args+=(--token "${token}")
+        token_github="${{inputs.token-github}}"
+        if [[ -n "${token_github}" ]]; then
+          args+=(--token "${token_github}")
         fi
         echo "[$(date +'%Y-%m-%d %H:%M:%S')] Running:"
         printf '%q ' "${args[@]}"
