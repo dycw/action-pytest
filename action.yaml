@@ -75,14 +75,27 @@ runs:
         "${args[@]}"
       shell: bash
 
+    - name: Run 'uv sync'
+      run: |
+        set -euo pipefail
+        args=(uv sync --all-extras --all-groups --active --frozen)
+        index="${{inputs.index}}"
+        if [[ -n "${index}" ]]; then
+          args+=(--index "${index}")
+        fi
+        args+=(--resolution ${{inputs.resolution}} --prerelease ${{inputs.prerelease}} --reinstall --managed-python)
+        native_tls="${{inputs.native-tls}}"
+        if [[ "${native_tls,,}" =~ ^(true|1|yes|on|t|y)$ ]]; then
+          args+=(--native-tls)
+        fi
+        echo "[$(date +'%Y-%m-%d %H:%M:%S')] Running:"
+        printf '%q ' "${args[@]}"
+        echo
+        "${args[@]}"
+
     - name: Run 'pytest'
       env:
         GITHUB_TOKEN: ${{inputs.token-github}}
         SOPS_AGE_KEY: ${{inputs.sops-age-key}}
-        UV_INDEX: ${{inputs.index}}
-        UV_RESOLUTION: ${{inputs.resolution}}
-        UV_PRERELEASE: ${{inputs.prerelease}}
-        UV_PYTHON: ${{inputs.python-version}}
-        UV_NATIVE_TLS: ${{inputs.native-tls}}
-      run: uv run --all-extras --all-groups --exact --with=pytest --with=pytest-xdist --isolated --reinstall --managed-python pytest --cov-report=term-missing --numprocesses auto
+      run: pytest --cov-report=term-missing --numprocesses auto
       shell: bash
