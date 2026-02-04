@@ -86,7 +86,7 @@ runs:
         fi
         args+=(--resolution ${{inputs.resolution}} --prerelease ${{inputs.prerelease}} --reinstall --managed-python)
         native_tls="${{inputs.native-tls}}"
-        if [[ "${native_tls,,}" =~ ^(true|1|yes|on|t|y)$ ]]; then
+        if [[ "$native_tls" =~ ^[Tt][Rr][Uu][Ee]$ ]]; then
           args+=(--native-tls)
         fi
         echo "[$(date +'%Y-%m-%d %H:%M:%S')] Running:"
