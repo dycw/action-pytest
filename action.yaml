@@ -93,6 +93,7 @@ runs:
         printf '%q ' "${args[@]}"
         echo
         "${args[@]}"
+      shell: bash
 
     - name: Run 'pytest'
       env:
