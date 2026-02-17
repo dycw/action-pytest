@@ -21,6 +21,12 @@ inputs:
   index:
     description: The URLs to use when resolving dependencies, in addition to the default index
     default:
+  index-username:
+    description: Username for authenticating to the UV index
+    default:
+  index-password:
+    description: Password for authenticating to the UV index
+    default:
   resolution:
     description: The strategy to use when selecting between the different compatible versions for a given package requirement
     default: highest
