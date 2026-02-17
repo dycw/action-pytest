@@ -82,6 +82,12 @@ runs:
         args=(uv sync --all-extras --all-groups --active --frozen)
         index="${{inputs.index}}"
         if [[ -n "${index}" ]]; then
+          if [ "${index#*=}" = "${index}" ]; then
+            index="custom=${index}"
+          fi
+          NAME=$(printf '%s\n' "${index%%=*}" | tr '[:lower:]' '[:upper:]')
+          export "UV_INDEX_${NAME}_USERNAME"="${{inputs.index-username}}"
+          export "UV_INDEX_${NAME}_PASSWORD"="${{inputs.index-password}}"
           args+=(--index "${index}")
         fi
         args+=(--resolution ${{inputs.resolution}} --prerelease ${{inputs.prerelease}} --reinstall --managed-python)
