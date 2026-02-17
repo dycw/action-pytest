@@ -21,6 +21,12 @@ inputs:
   index:
     description: The URLs to use when resolving dependencies, in addition to the default index
     default:
+  index-username:
+    description: Username for authenticating to the UV index
+    default:
+  index-password:
+    description: Password for authenticating to the UV index
+    default:
   resolution:
     description: The strategy to use when selecting between the different compatible versions for a given package requirement
     default: highest
@@ -82,6 +88,12 @@ runs:
         args=(uv sync --all-extras --all-groups --active --frozen)
         index="${{inputs.index}}"
         if [[ -n "${index}" ]]; then
+          if [ "${index#*=}" = "${index}" ]; then
+            index="custom=${index}"
+          fi
+          NAME=$(printf '%s\n' "${index%%=*}" | tr '[:lower:]' '[:upper:]')
+          export "UV_INDEX_${NAME}_USERNAME"="${{inputs.index-username}}"
+          export "UV_INDEX_${NAME}_PASSWORD"="${{inputs.index-password}}"
           args+=(--index "${index}")
         fi
         args+=(--resolution ${{inputs.resolution}} --prerelease ${{inputs.prerelease}} --reinstall --managed-python)
